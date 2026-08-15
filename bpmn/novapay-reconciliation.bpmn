@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://novapay.example/bpmn">
+  <bpmn:collaboration id="Collab_1">
+    <bpmn:participant id="Pool_1" name="Doi soat cuoi ngay" processRef="Process_Recon" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Recon" name="Doi soat cuoi ngay" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_1" name="Credit Core">
+        <bpmn:flowNodeRef>R_start</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>R_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_2" name="ERP">
+        <bpmn:flowNodeRef>R_2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>R_3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>R_gw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>R_4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>R_6</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_3" name="Finance Ops">
+        <bpmn:flowNodeRef>R_5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>R_7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>R_end</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="R_start" name="22:00 Dong ngay giao dich">
+      <bpmn:outgoing>Flow_01</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="R_1" name="Xuat file lo giao dich">
+      <bpmn:incoming>Flow_01</bpmn:incoming>
+      <bpmn:outgoing>Flow_02</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="R_2" name="Nap file, kiem checksum">
+      <bpmn:incoming>Flow_02</bpmn:incoming>
+      <bpmn:outgoing>Flow_03</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="R_3" name="Doi chieu 3 chieu">
+      <bpmn:incoming>Flow_03</bpmn:incoming>
+      <bpmn:outgoing>Flow_04</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="R_gw" name="Chenh lech &lt; 0.01%?">
+      <bpmn:incoming>Flow_04</bpmn:incoming>
+      <bpmn:outgoing>Flow_05</bpmn:outgoing>
+      <bpmn:outgoing>Flow_06</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="R_4" name="Tu dong khop va sinh but toan">
+      <bpmn:incoming>Flow_05</bpmn:incoming>
+      <bpmn:incoming>Flow_07</bpmn:incoming>
+      <bpmn:outgoing>Flow_08</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="R_5" name="Xu ly case doi soat">
+      <bpmn:incoming>Flow_06</bpmn:incoming>
+      <bpmn:outgoing>Flow_07</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="R_6" name="Dong so ngay">
+      <bpmn:incoming>Flow_08</bpmn:incoming>
+      <bpmn:outgoing>Flow_09</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="R_7" name="Gui bao cao doi soat 06:00">
+      <bpmn:incoming>Flow_09</bpmn:incoming>
+      <bpmn:outgoing>Flow_10</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="R_end" name="Hoan tat doi soat">
+      <bpmn:incoming>Flow_10</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_01" sourceRef="R_start" targetRef="R_1" />
+    <bpmn:sequenceFlow id="Flow_02" sourceRef="R_1" targetRef="R_2" />
+    <bpmn:sequenceFlow id="Flow_03" sourceRef="R_2" targetRef="R_3" />
+    <bpmn:sequenceFlow id="Flow_04" sourceRef="R_3" targetRef="R_gw" />
+    <bpmn:sequenceFlow id="Flow_05" name="Trong nguong" sourceRef="R_gw" targetRef="R_4" />
+    <bpmn:sequenceFlow id="Flow_06" name="Vuot nguong - chan dong so" sourceRef="R_gw" targetRef="R_5" />
+    <bpmn:sequenceFlow id="Flow_07" name="Da xu ly" sourceRef="R_5" targetRef="R_4" />
+    <bpmn:sequenceFlow id="Flow_08" sourceRef="R_4" targetRef="R_6" />
+    <bpmn:sequenceFlow id="Flow_09" sourceRef="R_6" targetRef="R_7" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="R_7" targetRef="R_end" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collab_1">
+      <bpmndi:BPMNShape id="Pool_1_di" bpmnElement="Pool_1" isHorizontal="true"><dc:Bounds x="160" y="80" width="1556" height="510" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1_di" bpmnElement="Lane_1" isHorizontal="true"><dc:Bounds x="190" y="80" width="1526" height="170" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_2_di" bpmnElement="Lane_2" isHorizontal="true"><dc:Bounds x="190" y="250" width="1526" height="170" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_3_di" bpmnElement="Lane_3" isHorizontal="true"><dc:Bounds x="190" y="420" width="1526" height="170" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_start_di" bpmnElement="R_start"><dc:Bounds x="200" y="147" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="175" y="188" width="86" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_1_di" bpmnElement="R_1"><dc:Bounds x="370" y="125" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_2_di" bpmnElement="R_2"><dc:Bounds x="540" y="295" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_3_di" bpmnElement="R_3"><dc:Bounds x="710" y="295" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_gw_di" bpmnElement="R_gw"><dc:Bounds x="880" y="310" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="855" y="365" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_4_di" bpmnElement="R_4"><dc:Bounds x="1050" y="295" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_5_di" bpmnElement="R_5"><dc:Bounds x="1050" y="465" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_6_di" bpmnElement="R_6"><dc:Bounds x="1220" y="295" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_7_di" bpmnElement="R_7"><dc:Bounds x="1390" y="465" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="R_end_di" bpmnElement="R_end"><dc:Bounds x="1560" y="487" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1535" y="528" width="86" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01"><di:waypoint x="236" y="165" /><di:waypoint x="370" y="165" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_di" bpmnElement="Flow_02"><di:waypoint x="480" y="165" /><di:waypoint x="510" y="165" /><di:waypoint x="510" y="335" /><di:waypoint x="540" y="335" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03_di" bpmnElement="Flow_03"><di:waypoint x="650" y="335" /><di:waypoint x="710" y="335" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04_di" bpmnElement="Flow_04"><di:waypoint x="820" y="335" /><di:waypoint x="880" y="335" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_di" bpmnElement="Flow_05"><di:waypoint x="930" y="335" /><di:waypoint x="1050" y="335" /><bpmndi:BPMNLabel><dc:Bounds x="1030" y="310" width="90" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06_di" bpmnElement="Flow_06"><di:waypoint x="930" y="335" /><di:waypoint x="990" y="335" /><di:waypoint x="990" y="505" /><di:waypoint x="1050" y="505" /><bpmndi:BPMNLabel><dc:Bounds x="970" y="480" width="90" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_di" bpmnElement="Flow_07"><di:waypoint x="1105" y="545" /><di:waypoint x="1105" y="630" /><di:waypoint x="1105" y="630" /><di:waypoint x="1105" y="375" /><bpmndi:BPMNLabel><dc:Bounds x="1085" y="605" width="90" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_di" bpmnElement="Flow_08"><di:waypoint x="1160" y="335" /><di:waypoint x="1220" y="335" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_di" bpmnElement="Flow_09"><di:waypoint x="1330" y="335" /><di:waypoint x="1360" y="335" /><di:waypoint x="1360" y="505" /><di:waypoint x="1390" y="505" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10"><di:waypoint x="1500" y="505" /><di:waypoint x="1560" y="505" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
